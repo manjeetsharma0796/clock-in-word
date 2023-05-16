@@ -1,0 +1,60 @@
+const lookup = function (number) {
+  const numInChar = {
+    0: 'ZERO',
+    1: 'ONE',
+    2: 'TWO',
+    3: 'THREE',
+    4: 'FOUR',
+    5: 'FIVE',
+    6: 'SIX',
+    7: 'SEVEN',
+    8: 'EIGHT',
+    9: 'NINE',
+    10: 'TEN',
+    11: 'ELEVEN',
+    12: 'TWELVE',
+    13: 'THIRTEEN',
+    14: 'FOURTEEN',
+    15: 'FIFTEEN',
+    16: 'SIXTEEN',
+    17: 'SEVENTEEN',
+    18: 'EIGHTEEN',
+    19: 'NINETEEN',
+    20: 'TWENTY',
+    30: 'THIRTY',
+    40: 'FORTY',
+    50: 'FIFTY'
+  }
+
+  return numInChar[number]; 
+};
+
+const numberToWord = function(number) {
+  if(number > 9 && number < 20 || number % 10 === 0 ) {
+    return `${lookup(number)}`;
+  }
+
+  const ones = number % 10;
+  const tens = number - ones;
+
+  return `${lookup(tens)}-${lookup(ones)}`;
+};
+
+const convertTimeToWord = function(time) { // 12:45:43
+  const [hours, minutes, seconds] = time.split(':')
+  
+  const hoursInWord = numberToWord(+hours).toString().padStart(8);
+  const minutesInWord = numberToWord(+minutes).toString().padStart(12);
+  const secondsInWord = numberToWord(+seconds).toString().padStart(12);
+
+  return `${hoursInWord}:${minutesInWord}:${secondsInWord}`;
+}
+
+setInterval(() => {
+  let time = new Date();
+  let [clock, ...rest] = time.toTimeString().split(' ')
+
+  console.log(convertToWord(clock));
+}, 1000);
+
+exports.convertTimeToWord = convertTimeToWord;
