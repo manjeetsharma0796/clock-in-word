@@ -26,11 +26,12 @@ const lookup = function (number) {
     50: 'FIFTY'
   }
 
-  return numInChar[number]; 
+  return numInChar[number];
 };
 
-const numberToWord = function(number) {
-  if(number > 9 && number < 20 || number % 10 === 0 ) {
+
+const numberToWord = function (number) {
+  if (number > 9 && number < 20 || number % 10 === 0) {
     return `${lookup(number)}`;
   }
 
@@ -40,21 +41,50 @@ const numberToWord = function(number) {
   return `${lookup(tens)}-${lookup(ones)}`;
 };
 
-const convertTimeToWord = function(time) { // 12:45:43
+const findMaxOnesLength = function () {
+  let maxOnesLength = 0;
+  for (let counter = 0; counter < 10; counter++) {
+    let currentWordLength = lookup(counter).length;
+
+    if (currentWordLength > maxOnesLength) {
+      maxOnesLength = currentWordLength;
+    }
+  }
+
+  return maxOnesLength;
+};
+
+const findMaxTensLength = function () {
+  let maxTensLength = 0;
+  for (let counter = 10; counter < 60; counter += 10) {
+    let currentWordLength = lookup(counter).length;
+
+    if (currentWordLength > maxTensLength) {
+      maxTensLength = currentWordLength;
+    }
+  }
+
+  return maxTensLength;
+};
+
+const convertTimeToWord = function (time) { // 12:45:43
+  const maxPad = findMaxOnesLength() + findMaxTensLength() + 1; //for separator
   const [hours, minutes, seconds] = time.split(':')
-  
-  const hoursInWord = numberToWord(+hours).toString().padStart(8);
-  const minutesInWord = numberToWord(+minutes).toString().padStart(12);
-  const secondsInWord = numberToWord(+seconds).toString().padStart(12);
+
+  const hoursInWord = numberToWord(+hours).toString().padStart(maxPad);
+  const minutesInWord = numberToWord(+minutes).toString().padStart(maxPad);
+  const secondsInWord = numberToWord(+seconds).toString().padStart(maxPad);
 
   return `${hoursInWord}:${minutesInWord}:${secondsInWord}`;
-}
+};
 
-setInterval(() => {
+const showTimeInWords = () => {
   let time = new Date();
   let [clock, ...rest] = time.toTimeString().split(' ')
 
-  console.log(convertToWord(clock));
-}, 1000);
+  console.log(convertTimeToWord(clock));
+};
+
+setInterval(showTimeInWords, 1000);
 
 exports.convertTimeToWord = convertTimeToWord;
